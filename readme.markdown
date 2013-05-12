@@ -41,11 +41,12 @@ Where:
 Ideally, the script file is a binary dump of the packets to be sent by the server. But for now, let's
 represent packets as strings and just extend from there later.
 
-The first line of the script file contains one character (one byte) signifying the delimiter of each packet
-in the script file. If the first line is blank, this defaults to the newline character.
+The first two bytes of the script file will contain the packet delimiters, i.e., what will signal the start
+and end of a packet. This will be followed by byte 10. If a script file starts with byte 10, the packet
+delimiters will default to `STX` and `ETX`.
 
-The second line of the script file contains two characters (two bytes) defining the star and end delimiters
-of each packet. If left blank, this defaults to `STX` and `ETX`.
-
-The next _n_ lines are the packets to be sent by kloves, in that order. When kloves has run through all the
+The next _n_ bytes are the packets to be sent by kloves, in that order. When kloves has run through all the
 packets strings in the script, the connection will linger but it will not respond to any packet sent to it.
+
+For text-mode script files, the packets in the packet list can be written as one packet per line. When sent
+out by kloves, these packets will be "sandwiched" by the provided packet delimiters.
