@@ -13,6 +13,10 @@ class ScriptFileParser(object):
     In addition to self.script_file, the following fields
     are also provided, but are not filled: stx, etx, separator,
     and a list of the packets that follow.
+
+    After initializing a ScriptFileParser object, no further
+    method calls should be necessary; the fields should be
+    automatically initialized.
     """
     
     def __init__(self, filename):
@@ -35,7 +39,8 @@ class TextScriptParser(ScriptFileParser):
     In text file mode, the parsing algorithm will be as follows:
       - The packet list will be one packet per line
       - Every packet sent will be "sandwiched" by the provided packet
-        delimiters, whatever they are
+        delimiters, whatever they are. The packets in self.packet_list
+        are already in this format; no further concatenation needed.
     """
     # TODO Check what happens when using Windows-style pagebreaks.
     
@@ -62,6 +67,7 @@ class TextScriptParser(ScriptFileParser):
             for packet in self.script_file:
                 self.packet_list.append(packet)
 
+            self.packet_list = tuple(map(lambda packet: self.stx + packet + self.etx, self.packet_list))
         except Exception, e:
             print(e.message)
         finally:
