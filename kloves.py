@@ -27,16 +27,20 @@ class KlovesServer(socketserver.ThreadingTCPServer):
 
 class KlovesHandler(socketserver.BaseRequestHandler):
     
+    # TODO Make this an attribute of KlovesHandler
+    BUFFER_SIZE = 1024
+
     def get_packet(self):
         """
         Receives requests, starting with the start delimiter for a packet,
         until it encounters the end delimiter for the packet.
         """
-        pass
+        whole_packet = ""
 
     def handle(self):
-        if self.hit_mode == "wait":
+        if self.server.hit_mode == "wait":
             # block here
+            print("My hit mode is wait")
             pass
 
 if __name__ == "__main__":
@@ -55,5 +59,5 @@ if __name__ == "__main__":
     print("Started with hit type `" + hit_mode + "`")
     script_file = sys.argv[4]
     print("Waiting for connections at " + host + ":" + sys.argv[3])
-    server = KlovesServer((host, port), KlovesHandler, sys.argv[1])
+    server = KlovesServer((host, port), KlovesHandler, hit_mode, [], ())
     server.serve_forever()

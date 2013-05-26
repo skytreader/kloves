@@ -58,7 +58,7 @@ class TextScriptParser(ScriptFileParser):
 
             if dellen and dellen != 2:
                 # TODO Make better Exceptions
-                throw Exception("Delimiters line of the script file should have two characters, sans newline.")
+                raise Exception("Delimiters line of the script file should have two characters, sans newline.")
             
             self.stx = delimiters[0]
             self.etx = delimiters[1]
@@ -68,7 +68,7 @@ class TextScriptParser(ScriptFileParser):
                 self.packet_list.append(packet)
 
             self.packet_list = tuple(map(lambda packet: self.stx + packet + self.etx, self.packet_list))
-        except Exception, e:
+        except Exception as e:
             print(e.message)
         finally:
             self.script_file.close()
@@ -83,7 +83,7 @@ class BinaryScriptParser(ScriptFileParser):
         try:
             # we must be able to read bytes here.
             pass
-        except Exception, e:
+        except Exception as e:
             print(e.message)
         finally:
             self.script_file.close()
